@@ -12,21 +12,10 @@
 		<label>Image URL</label>
 		<input type="text" />
 		<div class="puzzle">
-			<div class="tile"></div>
-			<div class="tile"></div>
-			<div class="tile"></div>
-			<div class="tile"></div>
-			<div class="tile"></div>
-			<div class="tile"></div>
-			<div class="tile"></div>
-			<div class="tile"></div>
-			<div class="tile"></div>
-			<div class="tile"></div>
-			<div class="tile"></div>
-			<div class="tile"></div>
-			<div class="tile"></div>
-			<div class="tile"></div>
-			<div class="tile"></div>
+			<div data-bind="tiles">
+				<div class="tile" data-bind="number">
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
