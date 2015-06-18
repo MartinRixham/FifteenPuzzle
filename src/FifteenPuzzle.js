@@ -41,7 +41,7 @@ function FifteenPuzzle() {
 
 		this.number = new Binding({
 
-			text: function() { return number; },
+			// text: function() { return number; },
 			click: function() {
 
 				if (this.isAdjacentToSpace()) {
@@ -53,6 +53,19 @@ function FifteenPuzzle() {
 
 					tiles.splice(myIndex, 1, new Space());
 					tiles.splice(spaceIndex, 1, this);
+				}
+			},
+			init: function(element) {
+				console.log(element);
+				var image = element.querySelector("img");
+
+				var horizontalOffset = ((number - 1) % 4) * -100;
+
+				if (image) {
+					image.style.marginLeft = horizontalOffset + "%"
+
+					var verticalOffset = (Math.floor((number - 1) / 4)) * -100;
+					image.style.marginTop = verticalOffset + "%"
 				}
 			}
 		});
@@ -114,7 +127,10 @@ function FifteenPuzzle() {
 	}
 
 	function Space() {
+		this.number = new Binding({
 
+			text: function() { return ''; },
+		});
 	}
 }
 
