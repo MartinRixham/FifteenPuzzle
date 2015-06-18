@@ -41,12 +41,27 @@ function FifteenPuzzle() {
 		return Math.floor(Math.random() * 15);
 	}
 
-	var times = 100;
+	var times = 1000;
 
-	for (var i = times; 0 < i; i--) {
+	// for (var i = times; 0 < i; i--) {
+	// 	var index = randomId();
+	// 	this.tiles[index].trySwap()
+	// }
+
+	var tiles = this.tiles
+	function shuffleTile() {
+		if (times == 0) {
+			return
+		}
+		times--
 		var index = randomId();
-		this.tiles[index].trySwap()
+		tiles[index].trySwap()
+		setTimeout(function () {
+			shuffleTile()
+		}, 10);
 	}
+
+	shuffleTile();
 
 
 	function Tile(number, tilesAccessor) {
