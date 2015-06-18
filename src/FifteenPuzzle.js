@@ -37,23 +37,39 @@ function FifteenPuzzle() {
 		new Space()
 	];
 
+	function randomId() {
+		return Math.floor(Math.random() * 15);
+	}
+
+	var times = 100;
+
+	for (var i = times; 0 < i; i--) {
+		var index = randomId();
+		this.tiles[index].trySwap()
+	}
+
+
 	function Tile(number, tilesAccessor) {
+
+		this.trySwap = function () {
+			if (this.isAdjacentToSpace()) {
+
+				var tiles = tilesAccessor();
+
+				var spaceIndex = this.getSpaceIndex();
+				var myIndex = this.getMyIndex();
+
+				tiles.splice(myIndex, 1, new Space());
+				tiles.splice(spaceIndex, 1, this);
+			}
+		}
 
 		this.number = new Binding({
 
 			// text: function() { return number; },
 			click: function() {
+				this.trySwap()
 
-				if (this.isAdjacentToSpace()) {
-
-					var tiles = tilesAccessor();
-
-					var spaceIndex = this.getSpaceIndex();
-					var myIndex = this.getMyIndex();
-
-					tiles.splice(myIndex, 1, new Space());
-					tiles.splice(spaceIndex, 1, this);
-				}
 			},
 			init: function(element) {
 				console.log(element);
@@ -131,6 +147,8 @@ function FifteenPuzzle() {
 
 			text: function() { return ''; },
 		});
+
+		this.trySwap = function (){}
 	}
 }
 
