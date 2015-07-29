@@ -1,5 +1,5 @@
 body {
-	background: pink;	
+	background: pink;
 }
 
 .puzzle {
@@ -14,4 +14,10 @@ body {
 	height: 170px;
 	border: solid black 1px;
 	float: left;
+	overflow: hidden;
+}
+
+.tile img {
+	height: 400%;
+	width: 400%;
 }

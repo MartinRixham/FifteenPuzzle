@@ -37,22 +37,66 @@ function FifteenPuzzle() {
 		new Space()
 	];
 
+	function randomId() {
+		return Math.floor(Math.random() * 15);
+	}
+
+	var times = 1000;
+
+	// for (var i = times; 0 < i; i--) {
+	// 	var index = randomId();
+	// 	this.tiles[index].trySwap()
+	// }
+
+	var tiles = this.tiles
+	function shuffleTile() {
+		if (times == 0) {
+			return
+		}
+		times--
+		var index = randomId();
+		tiles[index].trySwap()
+		setTimeout(function () {
+			shuffleTile()
+		}, 10);
+	}
+
+	shuffleTile();
+
+
 	function Tile(number, tilesAccessor) {
+
+		this.trySwap = function () {
+			if (this.isAdjacentToSpace()) {
+
+				var tiles = tilesAccessor();
+
+				var spaceIndex = this.getSpaceIndex();
+				var myIndex = this.getMyIndex();
+
+				tiles.splice(myIndex, 1, new Space());
+				tiles.splice(spaceIndex, 1, this);
+			}
+		}
 
 		this.number = new Binding({
 
-			text: function() { return number; },
+			// text: function() { return number; },
 			click: function() {
+				this.trySwap()
 
-				if (this.isAdjacentToSpace()) {
+			},
+			init: function(element) {
+				console.log(element);
+				var image = element.querySelector("img");
 
-					var tiles = tilesAccessor();
+				var horizontalOffset = ((number - 1) % 4) * -100;
 
-					var spaceIndex = this.getSpaceIndex();
-					var myIndex = this.getMyIndex();
+				if (image) {
+					image.style.marginLeft = horizontalOffset + "%"
 
-					tiles.splice(myIndex, 1, new Space());
-					tiles.splice(spaceIndex, 1, this);
+					var verticalOffset = (Math.floor((number - 1) / 4)) * -100;
+					image.style.marginTop = verticalOffset + "%"
 				}
 			}
 		});
@@ -114,7 +158,12 @@ function FifteenPuzzle() {
 	}
 
 	function Space() {
+		this.number = new Binding({
 
+			text: function() { return ''; },
+		});
+
+		this.trySwap = function (){}
 	}
 }
 
