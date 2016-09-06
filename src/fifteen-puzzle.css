@@ -2,6 +2,11 @@ body {
 	background: pink;
 }
 
+input {
+	width: 80%;
+	min-width: 250px;
+}
+
 .puzzle {
 	margin: 100px auto;
 	background: white;

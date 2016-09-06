@@ -1,17 +1,19 @@
 function FifteenPuzzle() {
 
-	this.imageURL = "";
+	var imageURL = new Datum("");
 
-	this.imageURLBox = new Binding({
+	this.imageURLInput = new Binding({
 
 		value: function (value) {
 
-			if (value != undefined) {
+			if (value) {
 
-				this.imageURL = value;
+				imageURL(value);
+
+				shuffleTiles(1000);
 			}
 
-			return this.imageURL;
+			return imageURL();
 		}
 	});
 
@@ -35,6 +37,7 @@ function FifteenPuzzle() {
 			new Space()
 		];
 
+
 	var tiles = this.tiles;
 
 	function getRandomTileIndex() {
@@ -42,7 +45,7 @@ function FifteenPuzzle() {
 		return Math.floor(Math.random() * 15);
 	}
 
-	(function shuffleTiles(remainingShuffles) {
+	function shuffleTiles(remainingShuffles) {
 
 		if (remainingShuffles > 0) {
 
@@ -55,7 +58,7 @@ function FifteenPuzzle() {
 				shuffleTiles(--remainingShuffles)
 			}, 10);
 		}
-	})(1000);
+	}
 
 	function Tile(number) {
 
@@ -92,6 +95,15 @@ function FifteenPuzzle() {
 					image.style.marginLeft = horizontalOffset + "%";
 					var verticalOffset = (Math.floor((number - 1) / 4)) * -100;
 					image.style.marginTop = verticalOffset + "%";
+				}
+			},
+			update: function(element) {
+
+				var image = element.querySelector("img");
+
+				if (image) {
+
+					image.src = imageURL();
 				}
 			}
 		});
@@ -139,7 +151,10 @@ function FifteenPuzzle() {
 
 	function Space() {
 
-		this.number = new Text(function() { return ""; });
+		this.number = new Text(function() {
+
+			return "";
+		});
 
 		this.trySwap = function () {};
 

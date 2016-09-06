@@ -10,10 +10,12 @@
 	</head>
 	<body>
 		<label>Image URL</label>
-		<input type="text" />
+		<input type="text" data-bind="imageURLInput" />
 		<div class="puzzle">
 			<div data-bind="tiles">
-				<div class="tile" data-bind="number"><img src="fish.jpg" alt="" /></div>
+				<div class="tile" data-bind="number">
+					<img alt="" />
+				</div>
 			</div>
 		</div>
 	</body>
