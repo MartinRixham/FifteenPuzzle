@@ -37,13 +37,7 @@ function FifteenPuzzle() {
 			new Space()
 		];
 
-
 	var tiles = this.tiles;
-
-	function getRandomTileIndex() {
-
-		return Math.floor(Math.random() * 15);
-	}
 
 	function shuffleTiles(remainingShuffles) {
 
@@ -60,26 +54,14 @@ function FifteenPuzzle() {
 		}
 	}
 
+	function getRandomTileIndex() {
+
+		return Math.floor(Math.random() * 15);
+	}
+
 	function Tile(number) {
 
-		this.trySwap = function () {
-
-			if (this.isAdjacentToSpace()) {
-
-				var spaceIndex = this.getSpaceIndex();
-				var myIndex = this.getMyIndex();
-
-				tiles.splice(myIndex, 1, new Space());
-				tiles.splice(spaceIndex, 1, this);
-			}
-		};
-
-		this.isSpace = function () {
-
-			return false;
-		};
-
-		this.number = new Binding({
+		this.tile = new Binding({
 
 			click: function () {
 
@@ -88,10 +70,10 @@ function FifteenPuzzle() {
 			init: function (element) {
 
 				var image = element.querySelector("img");
-				var horizontalOffset = ((number - 1) % 4) * -100;
 
 				if (image) {
 
+					var horizontalOffset = ((number - 1) % 4) * -100;
 					image.style.marginLeft = horizontalOffset + "%";
 					var verticalOffset = (Math.floor((number - 1) / 4)) * -100;
 					image.style.marginTop = verticalOffset + "%";
@@ -108,11 +90,23 @@ function FifteenPuzzle() {
 			}
 		});
 
+		this.trySwap = function () {
+
+			if (this.isAdjacentToSpace()) {
+
+				var spaceIndex = this.getSpaceIndex();
+				var myIndex = this.getMyIndex();
+
+				tiles.splice(myIndex, 1, new Space());
+				tiles.splice(spaceIndex, 1, this);
+			}
+		};
+
 		this.getSpaceIndex = function () {
 
 			for (var i = 0; i < tiles.length; i++) {
 
-				if (tiles[i] instanceof Space) {
+				if (tiles[i].isSpace()) {
 
 					return i;
 				}
@@ -147,11 +141,16 @@ function FifteenPuzzle() {
 
 			return isAdjacentToSpace;
 		};
+
+		this.isSpace = function () {
+
+			return false;
+		};
 	}
 
 	function Space() {
 
-		this.number = new Text(function() {
+		this.tile = new Text(function() {
 
 			return "";
 		});
