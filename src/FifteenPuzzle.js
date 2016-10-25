@@ -2,7 +2,7 @@ function FifteenPuzzle() {
 
 	var imageURL = "";
 
-	var size = 4;
+	var size = 20;
 
 	this.imageURLInput = new Binding({
 
@@ -62,7 +62,7 @@ function FifteenPuzzle() {
 				setTimeout(function () {
 
 					shuffleTiles(--remainingShuffles);
-					}, 5000 / shuffles);
+				}, 5000 / shuffles);
 			}
 		})(shuffles);
 
@@ -130,9 +130,10 @@ function FifteenPuzzle() {
 			function isAdjacentToSpace() {
 
 				var myIndex = getIndex();
+				var neighbours = getNeighbours(myIndex);
 				var isAdjacentToSpace = false;
 
-				[-size, -1, 1, size].forEach(function (index) {
+				neighbours.forEach(function(index) {
 
 					var neighbour = tiles[myIndex + index];
 
@@ -143,6 +144,23 @@ function FifteenPuzzle() {
 				});
 
 				return isAdjacentToSpace;
+			}
+
+			function getNeighbours(myIndex) {
+
+				var neighbours = [size, -size];
+
+				if (myIndex % size != 0) {
+
+					neighbours.push(-1);
+				}
+
+				if (myIndex % size != size - 1) {
+
+					neighbours.push(1);
+				}
+
+				return neighbours;
 			}
 
 			function getIndex() {
