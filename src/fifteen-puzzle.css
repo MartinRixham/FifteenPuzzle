@@ -2,6 +2,11 @@ body {
 	background: pink;
 }
 
+label {
+	display: inline-block;
+	width: 100px;
+}
+
 input {
 	width: 80%;
 	min-width: 250px;
@@ -11,7 +16,7 @@ input {
 	margin: 100px auto;
 	background: white;
 	overflow: hidden;
-	width: 688px;
+	width: 700px;
 }
 
 .tile {

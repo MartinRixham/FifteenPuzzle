@@ -2,6 +2,8 @@ function FifteenPuzzle() {
 
 	var imageURL = "";
 
+	var size = 4;
+
 	this.imageURLInput = new Binding({
 
 		value: function (value) {
@@ -9,38 +11,45 @@ function FifteenPuzzle() {
 			if (value) {
 
 				imageURL = value;
-				this.puzzle = new Puzzle(value);
+				this.puzzle = new Puzzle(imageURL, size);
 			}
 
 			return imageURL;
 		}
 	});
 
-	this.puzzle = new Puzzle("");
+	this.sizeInput = new Binding({
 
-	function Puzzle(imageURL) {
+		value: function(value) {
 
-		this.tiles =
-			[
-				new Tile(0),
-				new Tile(1),
-				new Tile(2),
-				new Tile(3),
-				new Tile(4),
-				new Tile(5),
-				new Tile(6),
-				new Tile(7),
-				new Tile(8),
-				new Tile(9),
-				new Tile(10),
-				new Tile(11),
-				new Tile(12),
-				new Tile(13),
-				new Tile(14),
-				new Space()
-			];
+			if (value) {
+
+				size = value;
+				this.puzzle = new Puzzle(imageURL, size);
+			}
+
+			return size;
+		}
+	});
+
+	this.puzzle = new Puzzle(imageURL, size);
+
+	function Puzzle(imageURL, size) {
+
+		this.tiles = [];
+
+		var numberOfTiles = size * size - 1;
+
+		for (var i = 0; i < numberOfTiles; i++) {
+
+			this.tiles.push(new Tile(i));
+		}
+
+		this.tiles.push(new Space());
 
 		var tiles = this.tiles;
+
+		var shuffles = 20 * size * size * size;
 
 		(function shuffleTiles(remainingShuffles) {
 
@@ -53,13 +62,13 @@ function FifteenPuzzle() {
 				setTimeout(function () {
 
 					shuffleTiles(--remainingShuffles);
-				}, 10);
+					}, 5000 / shuffles);
 			}
-		})(1000);
+		})(shuffles);
 
 		function getRandomTileIndex() {
 
-			return Math.floor(Math.random() * 15);
+			return Math.floor(Math.random() * size * size);
 		}
 
 		function Tile(number) {
@@ -91,12 +100,18 @@ function FifteenPuzzle() {
 				},
 				init: function (element) {
 
+					var tileWidth = (700 / size) - 2;
+					element.style.width = tileWidth + "px";
+					element.style.height = tileWidth + "px";
+
 					var image = element.querySelector("img");
-					var horizontalOffset = (number % 4) * -100;
-					var verticalOffset = Math.floor(number / 4) * -100;
+					var horizontalOffset = (number % size) * -100;
+					var verticalOffset = Math.floor(number / size) * -100;
 
 					image.style.marginLeft = horizontalOffset + "%";
 					image.style.marginTop = verticalOffset + "%";
+					image.style.height = (size * 100) + "%";
+					image.style.width = (size * 100) + "%";
 					image.src = imageURL;
 				}
 			});
@@ -117,7 +132,7 @@ function FifteenPuzzle() {
 				var myIndex = getIndex();
 				var isAdjacentToSpace = false;
 
-				[-4, -1, 1, 4].forEach(function (index) {
+				[-size, -1, 1, size].forEach(function (index) {
 
 					var neighbour = tiles[myIndex + index];
 
@@ -144,8 +159,17 @@ function FifteenPuzzle() {
 
 		function Space() {
 
-			this.trySwap = function () {
-			};
+			this.tile = new Binding({
+
+				init: function (element) {
+
+					var tileWidth = (700 / size) - 2;
+					element.style.width = tileWidth + "px";
+					element.style.height = tileWidth + "px";
+				}
+			});
+
+			this.trySwap = function () {};
 
 			this.isSpace = function () {
 
