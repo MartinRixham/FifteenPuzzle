@@ -5,13 +5,13 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 		<title>Fifteen Puzzle</title>
 		<link rel="stylesheet" type="text/css" href="fifteen-puzzle.css">
-		<script src="../lib/Datum.min.js"></script>
+		<script src="../lib/Datum.js"></script>
 		<script src="FifteenPuzzle.js"></script>
 	</head>
 	<body>
 		<label>Image URL</label>
 		<input type="text" data-bind="imageURLInput" />
-		<div class="puzzle">
+		<div class="puzzle" data-bind="puzzle">
 			<div data-bind="tiles">
 				<div>
 					<div class="tile" data-bind="tile">

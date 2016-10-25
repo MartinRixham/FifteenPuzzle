@@ -1,6 +1,6 @@
 function FifteenPuzzle() {
 
-	var imageURL = new Datum("");
+	var imageURL = "";
 
 	this.imageURLInput = new Binding({
 
@@ -8,149 +8,150 @@ function FifteenPuzzle() {
 
 			if (value) {
 
-				imageURL(value);
-
-				shuffleTiles(1000);
+				imageURL = value;
+				this.puzzle = new Puzzle(value);
 			}
 
-			return imageURL();
+			return imageURL;
 		}
 	});
 
-	this.tiles =
-		[
-			new Tile(0),
-			new Tile(1),
-			new Tile(2),
-			new Tile(3),
-			new Tile(4),
-			new Tile(5),
-			new Tile(6),
-			new Tile(7),
-			new Tile(8),
-			new Tile(9),
-			new Tile(10),
-			new Tile(11),
-			new Tile(12),
-			new Tile(13),
-			new Tile(14),
-			new Space()
-		];
+	this.puzzle = new Puzzle("");
 
-	var tiles = this.tiles;
+	function Puzzle(imageURL) {
 
-	function shuffleTiles(remainingShuffles) {
+		this.tiles =
+			[
+				new Tile(0),
+				new Tile(1),
+				new Tile(2),
+				new Tile(3),
+				new Tile(4),
+				new Tile(5),
+				new Tile(6),
+				new Tile(7),
+				new Tile(8),
+				new Tile(9),
+				new Tile(10),
+				new Tile(11),
+				new Tile(12),
+				new Tile(13),
+				new Tile(14),
+				new Space()
+			];
 
-		if (remainingShuffles > 0) {
+		var tiles = this.tiles;
 
-			var index = getRandomTileIndex();
+		(function shuffleTiles(remainingShuffles) {
 
-			tiles[index].trySwap();
+			if (remainingShuffles > 0) {
 
-			setTimeout(function () {
+				var index = getRandomTileIndex();
 
-				shuffleTiles(--remainingShuffles);
-			}, 10);
+				tiles[index].trySwap();
+
+				setTimeout(function () {
+
+					shuffleTiles(--remainingShuffles);
+				}, 10);
+			}
+		})(1000);
+
+		function getRandomTileIndex() {
+
+			return Math.floor(Math.random() * 15);
 		}
-	}
 
-	function getRandomTileIndex() {
+		function Tile(number) {
 
-		return Math.floor(Math.random() * 15);
-	}
+			var self = this;
 
-	function Tile(number) {
+			this.trySwap = function () {
 
-		var self = this;
+				if (isAdjacentToSpace()) {
 
-		this.trySwap = function () {
+					var spaceIndex = getSpaceIndex();
+					var myIndex = getIndex();
 
-			if (isAdjacentToSpace()) {
-
-				var spaceIndex = getSpaceIndex();
-				var myIndex = getIndex();
-
-				tiles.splice(myIndex, 1, new Space());
-				tiles.splice(spaceIndex, 1, this);
-			}
-		};
-
-		this.isSpace = function () {
-
-			return false;
-		};
-
-		this.tile = new Binding({
-
-			click: function () {
-
-				this.trySwap()
-			},
-			init: function (element) {
-
-				var image = element.querySelector("img");
-				var horizontalOffset = (number % 4) * -100;
-				var verticalOffset = Math.floor(number / 4) * -100;
-
-				image.style.marginLeft = horizontalOffset + "%";
-				image.style.marginTop = verticalOffset + "%";
-			},
-			update: function(element) {
-
-				var image = element.querySelector("img");
-				image.src = imageURL();
-			}
-		});
-
-		function getSpaceIndex() {
-
-			for (var i = 0; i < tiles.length; i++) {
-
-				if (tiles[i].isSpace()) {
-
-					return i;
+					tiles.splice(myIndex, 1, new Space());
+					tiles.splice(spaceIndex, 1, this);
 				}
-			}
-		}
+			};
 
-		function isAdjacentToSpace() {
+			this.isSpace = function () {
 
-			var myIndex = getIndex();
-			var isAdjacentToSpace = false;
+				return false;
+			};
 
-			[-4, -1, 1, 4].forEach(function(index) {
+			this.tile = new Binding({
 
-				var neighbour = tiles[myIndex + index];
+				click: function () {
 
-				if (neighbour && neighbour.isSpace()) {
+					this.trySwap()
+				},
+				init: function (element) {
 
-					isAdjacentToSpace = true;
+					var image = element.querySelector("img");
+					var horizontalOffset = (number % 4) * -100;
+					var verticalOffset = Math.floor(number / 4) * -100;
+
+					image.style.marginLeft = horizontalOffset + "%";
+					image.style.marginTop = verticalOffset + "%";
+					image.src = imageURL;
 				}
 			});
 
-			return isAdjacentToSpace;
-		}
+			function getSpaceIndex() {
 
-		function getIndex() {
+				for (var i = 0; i < tiles.length; i++) {
 
-			for (var i = 0; i < tiles.length; i++) {
+					if (tiles[i].isSpace()) {
 
-				if (self == tiles[i]) {
+						return i;
+					}
+				}
+			}
 
-					return i;
+			function isAdjacentToSpace() {
+
+				var myIndex = getIndex();
+				var isAdjacentToSpace = false;
+
+				[-4, -1, 1, 4].forEach(function (index) {
+
+					var neighbour = tiles[myIndex + index];
+
+					if (neighbour && neighbour.isSpace()) {
+
+						isAdjacentToSpace = true;
+					}
+				});
+
+				return isAdjacentToSpace;
+			}
+
+			function getIndex() {
+
+				for (var i = 0; i < tiles.length; i++) {
+
+					if (self == tiles[i]) {
+
+						return i;
+					}
 				}
 			}
 		}
-	}
 
-	function Space() {
+		function Space() {
 
-		this.trySwap = function () {};
+			this.trySwap = function () {
+			};
 
-		this.isSpace = function () {
+			this.isSpace = function () {
 
-			return true;
-		};
+				return true;
+			};
+		}
 	}
 }
 
