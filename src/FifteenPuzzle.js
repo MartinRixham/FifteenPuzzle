@@ -2,33 +2,35 @@ function FifteenPuzzle() {
 
 	var imageURL = "";
 
-	var size = 20;
+	var size = 5;
+
+	var self = this;
 
 	this.imageURLInput = new Binding({
 
-		value: function (value) {
+		init: function(element) {
 
-			if (value) {
+			element.value = imageURL;
 
-				imageURL = value;
-				this.puzzle = new Puzzle(imageURL, size);
-			}
+			element.addEventListener("change", function() {
 
-			return imageURL;
+				imageURL = element.value;
+				self.puzzle = new Puzzle(imageURL, size);
+			});
 		}
 	});
 
 	this.sizeInput = new Binding({
 
-		value: function(value) {
+		init: function(element) {
 
-			if (value) {
+			element.value = size;
 
-				size = value;
-				this.puzzle = new Puzzle(imageURL, size);
-			}
+			element.addEventListener("change", function() {
 
-			return size;
+				size = ~~element.value;
+				self.puzzle = new Puzzle(imageURL, size);
+			});
 		}
 	});
 
@@ -38,7 +40,7 @@ function FifteenPuzzle() {
 
 		this.tiles = [];
 
-		var numberOfTiles = size * size - 1;
+		var numberOfTiles = Math.floor(size * size - 1);
 
 		for (var i = 0; i < numberOfTiles; i++) {
 
@@ -49,9 +51,9 @@ function FifteenPuzzle() {
 
 		var tiles = this.tiles;
 
-		var shuffles = 20 * size * size * size;
+		var shuffles = Math.min(20 * size * size * size, 10000);
 
-		(function shuffleTiles(remainingShuffles) {
+		function shuffleTiles(remainingShuffles) {
 
 			if (remainingShuffles > 0) {
 
@@ -62,9 +64,14 @@ function FifteenPuzzle() {
 				setTimeout(function () {
 
 					shuffleTiles(--remainingShuffles);
-				}, 5000 / shuffles);
+				}, Math.floor(5000 / shuffles));
 			}
-		})(shuffles);
+		}
+
+		if (imageURL) {
+
+			shuffleTiles(shuffles);
+		}
 
 		function getRandomTileIndex() {
 
@@ -150,12 +157,12 @@ function FifteenPuzzle() {
 
 				var neighbours = [size, -size];
 
-				if (myIndex % size != 0) {
+				if (myIndex % size) {
 
 					neighbours.push(-1);
 				}
 
-				if (myIndex % size != size - 1) {
+				if ((myIndex + 1) % size) {
 
 					neighbours.push(1);
 				}
