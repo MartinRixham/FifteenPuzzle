@@ -4,37 +4,35 @@ function FifteenPuzzle() {
 
 	var size = 5;
 
-	var self = this;
+	this.puzzle = new Puzzle(imageURL, size);
 
 	this.imageURLInput = new Binding({
 
-		init: function(element) {
+		value: function(value) {
 
-			element.value = imageURL;
+			if (value) {
 
-			element.addEventListener("change", function() {
+				imageURL = value;
+				this.puzzle = new Puzzle(imageURL, size);
+			}
 
-				imageURL = element.value;
-				self.puzzle = new Puzzle(imageURL, size);
-			});
+			return imageURL;
 		}
 	});
 
 	this.sizeInput = new Binding({
 
-		init: function(element) {
+		value: function(value) {
 
-			element.value = size;
+			if (value) {
 
-			element.addEventListener("change", function() {
+				size = ~~value;
+				this.puzzle = new Puzzle(imageURL, size);
+			}
 
-				size = ~~element.value;
-				self.puzzle = new Puzzle(imageURL, size);
-			});
+			return size;
 		}
 	});
-
-	this.puzzle = new Puzzle(imageURL, size);
 
 	function Puzzle(imageURL, size) {
 
